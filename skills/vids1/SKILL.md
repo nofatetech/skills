@@ -21,9 +21,9 @@ Done when `./render.sh cow` ends with `render.sh: done` and the log says `tts=on
    - `[sfx: …]` and `[music: …]` names: `SFX` / `MUSIC` in `domains/audio/audio_library.gd` (procedural placeholders)
    - `{mood: …}` on a `## Scene:` line: `domains/mood/mood_library.gd`
    - `style:`: `BUILTIN` in `domains/style/style_library.gd`, or `universes/<u>/styles/<id>.tres`
-   Lines are `alias: (emote) text`; dialogue is the clock, so time everything relative to lines and `[wait: s]`, never absolute seconds. Set `language:` (`en`/`es`) to match the cast's voices.
+   Lines are `alias: (emote) text`. The `(emote)` is kept out of captions and speech but not rendered yet; delivery (voice speed, expressiveness, colors) comes from the scene's `{mood: …}`, so put a line that needs a different tone in a scene with that mood. Dialogue is the clock, so time everything relative to lines and `[wait: s]`, never absolute seconds. Set `language:` (`en`/`es`) to match the cast's voices.
 2. **Render** — `./render.sh <name> [style] [--lang <code>]` → `output/<name>[_<style>].mp4`. It needs a display (`xvfb-run` is used when there is none); a Godot window flashes during the render. Done when it prints `render.sh: done` with no `WARNING: Directive not yet supported` lines (each one is a directive that silently did nothing: rewrite it with a supported verb).
-3. **Check** — `<this skill's folder>/scripts/inspect.sh output/<name>.mp4`, then Read the `_sheet.png` it writes. Done when every one of these holds:
+3. **Check** — `<this skill's folder>/scripts/inspect.sh output/<name>.mp4`, then Read the `_sheet.png` it writes. The check is on the final file: every re-render (even a one-line edit) gets a fresh `inspect.sh` run and sheet read. Done when every one of these holds for the file you hand over:
    - size matches the style (wide 1280×720, vertical 1080×1920, square 1080×1080)
    - audio present, `max_volume` near 0 dB, `mean_volume` above about −30 dB
    - every character fully in frame, captions readable, scene moods visible as background/grade changes
